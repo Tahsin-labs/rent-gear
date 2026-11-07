@@ -1,0 +1,25 @@
+model GearItem {
+  id             String   @id @default(uuid())
+  name           String   @db.VarChar(255)
+  description    String
+  brand          String   @db.VarChar(100)
+  imageUrl       String
+  pricePerDay    Decimal  @db.Decimal(10, 2)
+  stock          Int      @default(1)
+  isAvailable    Boolean  @default(true)
+  specifications Json?
+
+  categoryId     String
+  providerId     String
+
+  category       Category @relation(fields: [categoryId], references: [id])
+  provider       User     @relation(fields: [providerId], references: [id])
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([providerId])
+  @@index([isAvailable])
+  @@map("gear_items")
+}
