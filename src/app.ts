@@ -5,7 +5,7 @@ import cors from "cors";
 import config from "./config";
 import { userRouter } from "./modules/user/user.route";
 import { authRouter } from "./modules/auth/auth.route";
-
+import { gearRouter } from "./modules/gear/gear.route";
 const app: Application = express();
 
 app.use(
@@ -28,5 +28,6 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/provider", gearRouter);
 
 export default app;

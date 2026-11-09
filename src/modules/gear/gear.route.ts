@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { gearController } from "./gear.controller";
 import auth from "../../middlewares/auth";
-import { authorize } from "../../middlewares/role";
+import  authorize  from "../../middlewares/role";
 
 const router = Router();
 
