@@ -110,6 +110,93 @@ const createGear = async (req: Request, res: Response) => {
   }
 };
 
+
+//..................
+
+const getAllGear = async (req: Request, res: Response) => {
+  try {
+    const search = req.query.search as string | undefined;
+    const categoryId = req.query.categoryId as string | undefined;
+    const brand = req.query.brand as string | undefined;
+
+    const minPrice =
+      req.query.minPrice !== undefined
+        ? Number(req.query.minPrice)
+        : undefined;
+
+    const maxPrice =
+      req.query.maxPrice !== undefined
+        ? Number(req.query.maxPrice)
+        : undefined;
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    if (
+      (minPrice !== undefined && (!Number.isFinite(minPrice) || minPrice < 0)) ||
+      (maxPrice !== undefined && (!Number.isFinite(maxPrice) || maxPrice < 0))
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid price range",
+      });
+    }
+
+    if (minPrice !== undefined && maxPrice !== undefined && minPrice > maxPrice) {
+      return res.status(400).json({
+        success: false,
+        message: "minPrice cannot be greater than maxPrice",
+      });
+    }
+
+    if (
+      !Number.isInteger(page) ||
+      !Number.isInteger(limit) ||
+      page < 1 ||
+      limit < 1 ||
+      limit > 100
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Page must be positive and limit must be between 1 and 100",
+      });
+    }
+
+    const result = await gearService.getAllGear({
+      search,
+      categoryId,
+      brand,
+      minPrice,
+      maxPrice,
+      page,
+      limit,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Gear retrieved successfully",
+      ...result,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to retrieve gear",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
 export const gearController = {
-  createGear,
+  createGear, getAllGear
 };
