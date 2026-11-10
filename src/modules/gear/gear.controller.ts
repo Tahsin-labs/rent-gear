@@ -186,7 +186,43 @@ const getAllGear = async (req: Request, res: Response) => {
     });
   }
 };
+//.............
 
+
+const getGearById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    
+    if (typeof id !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid gear ID",
+      });
+    }
+    const gear = await gearService.getGearById(id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Gear retrieved successfully",
+      data: gear,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "Gear not found") {
+      return res.status(404).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to retrieve gear",
+    });
+  }
+};
 
 
 
@@ -198,5 +234,5 @@ const getAllGear = async (req: Request, res: Response) => {
 
 
 export const gearController = {
-  createGear, getAllGear
+  createGear, getAllGear, getGearById
 };

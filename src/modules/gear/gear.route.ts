@@ -13,7 +13,7 @@ router.post(
 );
 
 router.get("/gear", gearController.getAllGear);
-
+router.get("/gear/:id", gearController.getGearById);
 
 
 export const gearRouter = router;

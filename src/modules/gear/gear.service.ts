@@ -88,4 +88,31 @@ const getAllGear = async (filters: {
   };
 };
 
-export const gearService = { createGear, getAllGear };
+//.....................
+
+const getGearById = async (id: string) => {
+  const gear = await prisma.gearItem.findUnique({
+    where: { id },
+    include: {
+      category: true,
+      provider: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
+
+  if (!gear || !gear.isAvailable) {
+    throw new Error("Gear not found");
+  }
+
+  return gear;
+};
+
+
+
+
+
+export const gearService = { createGear, getAllGear,getGearById };
