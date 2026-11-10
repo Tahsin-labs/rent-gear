@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { CreateGearPayload } from "./gear.interface";
+import { CreateGearPayload ,UpdateGearPayload} from "./gear.interface";
 
 const createGear = async (payload: CreateGearPayload, providerId: string) => {
   const category = await prisma.category.findUnique({
@@ -112,7 +112,42 @@ const getGearById = async (id: string) => {
 };
 
 
+//.............
+
+
+const updateGear = async (
+  id: string,
+  providerId: string,
+  payload: UpdateGearPayload
+) => {
+  const existingGear = await prisma.gearItem.findFirst({
+    where: {
+      id,
+      providerId,
+    },
+  });
+
+  if (!existingGear) {
+    throw new Error("Gear not found or you are not the owner");
+  }
+
+  if (payload.categoryId) {
+    const category = await prisma.category.findUnique({
+      where: { id: payload.categoryId },
+    });
+
+    if (!category) {
+      throw new Error("Category not found");
+    }
+  }
+
+  return prisma.gearItem.update({
+    where: { id },
+    data: payload,
+  });
+};
 
 
 
-export const gearService = { createGear, getAllGear,getGearById };
+
+export const gearService = { createGear, getAllGear,getGearById,updateGear, };

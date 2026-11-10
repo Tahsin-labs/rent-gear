@@ -16,4 +16,11 @@ router.get("/gear", gearController.getAllGear);
 router.get("/gear/:id", gearController.getGearById);
 
 
+router.patch(
+  "/gear/:id",
+  auth,
+  authorize("PROVIDER"),
+  gearController.updateGear
+);
+
 export const gearRouter = router;
