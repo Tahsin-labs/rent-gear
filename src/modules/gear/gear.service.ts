@@ -147,7 +147,29 @@ const updateGear = async (
   });
 };
 
+//..........
+
+
+const deleteGear = async (id: string, providerId: string) => {
+  const existingGear = await prisma.gearItem.findFirst({
+    where: {
+      id,
+      providerId,
+    },
+  });
+
+  if (!existingGear) {
+    throw new Error("Gear not found or you are not the owner");
+  }
+
+  await prisma.gearItem.delete({
+    where: { id },
+  });
+
+  return existingGear;
+};
 
 
 
-export const gearService = { createGear, getAllGear,getGearById,updateGear, };
+export const gearService = { createGear, getAllGear,getGearById,updateGear,   deleteGear,
+};

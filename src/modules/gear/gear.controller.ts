@@ -400,7 +400,44 @@ const updateGear = async (req: Request, res: Response) => {
     });
   }
 };
+//.........
 
+const deleteGear = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+
+    if (typeof id !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid gear ID",
+      });
+    }
+
+    await gearService.deleteGear(id, res.locals.user.id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Gear deleted successfully",
+    });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === "Gear not found or you are not the owner"
+    ) {
+      return res.status(404).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete gear",
+    });
+  }
+};
 
 
 
@@ -410,5 +447,5 @@ const updateGear = async (req: Request, res: Response) => {
 
 
 export const gearController = {
-  createGear, getAllGear, getGearById, updateGear,
+  createGear, getAllGear, getGearById, updateGear, deleteGear,
 };

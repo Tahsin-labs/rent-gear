@@ -23,4 +23,11 @@ router.patch(
   gearController.updateGear
 );
 
+router.delete(
+  "/gear/:id",
+  auth,
+  authorize("PROVIDER"),
+  gearController.deleteGear
+);
+
 export const gearRouter = router;
