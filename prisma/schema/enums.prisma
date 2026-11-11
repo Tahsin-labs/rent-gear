@@ -8,3 +8,11 @@ enum Role {
   PROVIDER
   ADMIN
 }
+
+enum RentalStatus {
+  PENDING
+  CONFIRMED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}

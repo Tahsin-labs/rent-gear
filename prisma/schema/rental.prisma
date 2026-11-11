@@ -1,0 +1,22 @@
+model Rental {
+  id         String       @id @default(uuid())
+  customerId String
+  gearId     String
+
+  startDate  DateTime
+  endDate    DateTime
+
+  totalPrice Decimal      @db.Decimal(10, 2)
+  status     RentalStatus @default(PENDING)
+
+  customer   User         @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  gear       GearItem     @relation(fields: [gearId], references: [id], onDelete: Restrict)
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([customerId])
+  @@index([gearId])
+  @@index([status])
+  @@map("rentals")
+}
