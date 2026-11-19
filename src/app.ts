@@ -9,6 +9,7 @@ import { gearRouter } from "./modules/gear/gear.route";
 import { categoryRouter } from "./modules/category/category.route";
 import { paymentRouter } from "./modules/payment/payment.route";
 import adminRouter from "./modules/admin/admin.route";
+import reviewRouter from "./modules/review/review.route";
 // import { rentalRouter } from "./modules/rental/rental.route";
 
 import {
@@ -45,4 +46,6 @@ app.use("/api/customer", customerRentalRouter);
 app.use("/api/provider", providerRentalRouter);
 app.use("/api/customer/payments", paymentRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/customer/reviews", reviewRouter);
+app.use("/api", reviewRouter);
 export default app;
