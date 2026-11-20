@@ -16,6 +16,10 @@ import {
   customerRentalRouter,
   providerRentalRouter,
 } from "./modules/rental/rental.route";
+
+import errorHandler from "./middlewares/errorHandler";
+import swaggerUi from "swagger-ui-express";
+
 const app: Application = express();
 
 app.use(
@@ -48,4 +52,22 @@ app.use("/api/customer/payments", paymentRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/customer/reviews", reviewRouter);
 app.use("/api", reviewRouter);
+
+
+
+// Handle unknown routes
+app.use((req, res) => {
+  return res.status(404).json({
+    success: false,
+    statusCode: 404,
+    message: `Route ${req.originalUrl} not found`,
+    errorDetails: null,
+  });
+});
+
+// Centralized error handler (must be last)
+app.use(errorHandler);
+
+
+
 export default app;

@@ -1,61 +1,32 @@
+
 import { Request, Response } from "express";
 import { categoryService } from "./category.service";
+import { createCategorySchema } from "./category.validation";
 
 const createCategory = async (req: Request, res: Response) => {
   try {
-    const { name, slug, description } = req.body;
+    const validation = createCategorySchema.safeParse(req.body);
 
-    // Required field validation
-    if (!name || !slug) {
+    if (!validation.success) {
       return res.status(400).json({
         success: false,
-        message: "Category name and slug are required",
+        statusCode: 400,
+        message: "Validation failed",
+        errorDetails: validation.error.issues,
       });
     }
 
-    // Type validation
-    if (
-      typeof name !== "string" ||
-      typeof slug !== "string" ||
-      (description !== undefined &&
-        typeof description !== "string")
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid field types",
-      });
-    }
-
-    const cleanName = name.trim();
-    const cleanSlug = slug.trim().toLowerCase();
-
-    if (!cleanName || !cleanSlug) {
-      return res.status(400).json({
-        success: false,
-        message: "Name and slug cannot be empty",
-      });
-    }
-
-    if (!/^[a-z0-9-]+$/.test(cleanSlug)) {
-      return res.status(400).json({
-        success: false,
-        message: "Slug can contain only lowercase letters, numbers and hyphens",
-      });
-    }
-
-    const category = await categoryService.createCategory({
-      name: cleanName,
-      slug: cleanSlug,
-      description: description?.trim() || undefined,
-    });
+    const category = await categoryService.createCategory(
+      validation.data
+    );
 
     return res.status(201).json({
       success: true,
+      statusCode: 201,
       message: "Category created successfully",
       data: category,
     });
   } catch (error) {
-    // Duplicate name or slug
     if (
       typeof error === "object" &&
       error !== null &&
@@ -64,7 +35,9 @@ const createCategory = async (req: Request, res: Response) => {
     ) {
       return res.status(409).json({
         success: false,
+        statusCode: 409,
         message: "Category name or slug already exists",
+        errorDetails: null,
       });
     }
 
@@ -72,7 +45,9 @@ const createCategory = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       success: false,
+      statusCode: 500,
       message: "Failed to create category",
+      errorDetails: null,
     });
   }
 };

@@ -2,36 +2,23 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { authService } from "./auth.service";
+import { loginValidationSchema } from "./auth.validation";
 
 const loginUser = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    // Validate request body
+    const validation = loginValidationSchema.safeParse(req.body);
 
-    if (!email || !password) {
+    if (!validation.success) {
       return res.status(httpStatus.BAD_REQUEST).json({
         success: false,
         statusCode: httpStatus.BAD_REQUEST,
-        message: "Email and password are required",
-        errorDetails: null,
+        message: "Validation failed",
+        errorDetails: validation.error.issues,
       });
     }
 
-    if (
-      typeof email !== "string" ||
-      typeof password !== "string"
-    ) {
-      return res.status(httpStatus.BAD_REQUEST).json({
-        success: false,
-        statusCode: httpStatus.BAD_REQUEST,
-        message: "Invalid email or password format",
-        errorDetails: null,
-      });
-    }
-
-    const result = await authService.loginUser({
-      email,
-      password,
-    });
+    const result = await authService.loginUser(validation.data);
 
     // Store token in HTTP-only cookie
     res.cookie("accessToken", result.accessToken, {
@@ -56,10 +43,7 @@ const loginUser = async (req: Request, res: Response) => {
     return res.status(statusCode).json({
       success: false,
       statusCode,
-      message:
-        error instanceof Error
-          ? error.message
-          : "Login failed",
+      message: error instanceof Error ? error.message : "Login failed",
       errorDetails: null,
     });
   }

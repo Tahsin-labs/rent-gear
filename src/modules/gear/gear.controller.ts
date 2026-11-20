@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { gearService } from "./gear.service";
 import { UpdateGearPayload } from "./gear.interface";
+
 const createGear = async (req: Request, res: Response) => {
   try {
     const {
