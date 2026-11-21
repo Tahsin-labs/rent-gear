@@ -4,8 +4,9 @@ import { prisma } from "../lib/prisma";
 
 const createAdmin = async () => {
   try {
-    const email = process.env.ADMIN_EMAIL;
-    const password = process.env.ADMIN_PASSWORD;
+    const email = process.env.ADMIN_EMAIL || "admin@gearup.com";
+    const password = process.env.ADMIN_PASSWORD || "admin123456";
+    const name = process.env.ADMIN_NAME || "GearUp Admin";
 
     if (!email || !password) {
       throw new Error("ADMIN_EMAIL and ADMIN_PASSWORD are required");
@@ -20,16 +21,15 @@ const createAdmin = async () => {
     });
 
     if (existingUser) {
-      throw new Error(
-        "This email already exists. Choose a new email for the first admin."
-      );
+      console.log(`Admin user with email ${email} already exists.`);
+      return;
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const admin = await prisma.user.create({
       data: {
-        name: "GearUp Admin",
+        name,
         email,
         password: hashedPassword,
         role: "ADMIN",

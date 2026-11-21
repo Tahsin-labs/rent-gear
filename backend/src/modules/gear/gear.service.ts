@@ -171,5 +171,37 @@ const deleteGear = async (id: string, providerId: string) => {
 
 
 
-export const gearService = { createGear, getAllGear,getGearById,updateGear,   deleteGear,
+const getGearAvailability = async (gearId: string) => {
+  const gear = await prisma.gearItem.findUnique({
+    where: { id: gearId },
+    select: { id: true, stock: true },
+  });
+
+  if (!gear) {
+    throw new Error("Gear not found");
+  }
+
+  const activeRentals = await prisma.rental.findMany({
+    where: {
+      gearId,
+      status: {
+        in: ["PENDING", "CONFIRMED", "ACTIVE"],
+      },
+    },
+    select: {
+      startDate: true,
+      endDate: true,
+    },
+    orderBy: {
+      startDate: "asc",
+    },
+  });
+
+  return activeRentals.map((r) => ({
+    startDate: r.startDate.toISOString(),
+    endDate: r.endDate.toISOString(),
+  }));
+};
+
+export const gearService = { createGear, getAllGear,getGearById,updateGear,   deleteGear, getGearAvailability,
 };

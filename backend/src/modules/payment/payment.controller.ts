@@ -74,11 +74,14 @@ const successCallback = async (req: Request, res: Response) => {
       throw new Error("Invalid callback data");
     }
 
-    await paymentService.verifyAndCompletePayment(val_id, tran_id);
+    const completed = await paymentService.verifyAndCompletePayment(val_id, tran_id);
+    const orderId = completed?.rentalId || "";
 
-    return res.redirect(`${process.env.FRONTEND_URL}/payment/success`);
+    return res.redirect(
+      `${process.env.FRONTEND_URL || "http://localhost:3000"}/payment/success?tran_id=${tran_id}&orderId=${orderId}`
+    );
   } catch {
-    return res.redirect(`${process.env.FRONTEND_URL}/payment/failed`);
+    return res.redirect(`${process.env.FRONTEND_URL || "http://localhost:3000"}/payment/fail`);
   }
 };
 
@@ -93,7 +96,11 @@ const failCallback = async (req: Request, res: Response) => {
     }
   }
 
-  return res.redirect(`${process.env.FRONTEND_URL}/payment/failed`);
+  return res.redirect(
+    `${process.env.FRONTEND_URL || "http://localhost:3000"}/payment/fail${
+      tran_id ? `?tran_id=${tran_id}` : ""
+    }`
+  );
 };
 
 const cancelCallback = async (req: Request, res: Response) => {
@@ -107,7 +114,11 @@ const cancelCallback = async (req: Request, res: Response) => {
     }
   }
 
-  return res.redirect(`${process.env.FRONTEND_URL}/payment/cancelled`);
+  return res.redirect(
+    `${process.env.FRONTEND_URL || "http://localhost:3000"}/payment/cancel${
+      tran_id ? `?tran_id=${tran_id}` : ""
+    }`
+  );
 };
 
 const ipnCallback = async (req: Request, res: Response) => {

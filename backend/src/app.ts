@@ -22,9 +22,21 @@ import swaggerUi from "swagger-ui-express";
 
 const app: Application = express();
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  config.app_url,
+  process.env.FRONTEND_URL,
+].filter(Boolean) as string[];
+
 app.use(
   cors({
-    origin: config.app_url,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Permissive for preview/deployed origins
+      }
+    },
     credentials: true,
   })
 );

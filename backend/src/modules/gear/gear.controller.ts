@@ -447,6 +447,30 @@ const deleteGear = async (req: Request, res: Response) => {
 
 
 
+const getGearAvailability = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    if (typeof id !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid gear ID",
+      });
+    }
+
+    const data = await gearService.getGearAvailability(id);
+    return res.status(200).json({
+      success: true,
+      message: "Gear availability fetched successfully",
+      data,
+    });
+  } catch (error) {
+    return res.status(error instanceof Error && error.message === "Gear not found" ? 404 : 500).json({
+      success: false,
+      message: error instanceof Error ? error.message : "Failed to get availability",
+    });
+  }
+};
+
 export const gearController = {
-  createGear, getAllGear, getGearById, updateGear, deleteGear,
+  createGear, getAllGear, getGearById, updateGear, deleteGear, getGearAvailability,
 };

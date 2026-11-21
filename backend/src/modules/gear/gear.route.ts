@@ -14,6 +14,7 @@ router.post(
 
 router.get("/gear", gearController.getAllGear);
 router.get("/gear/:id", gearController.getGearById);
+router.get("/gear/:id/availability", gearController.getGearAvailability);
 
 
 router.patch(
