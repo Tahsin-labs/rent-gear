@@ -4,9 +4,10 @@ import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle2, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -48,11 +49,9 @@ function SuccessContent() {
         </p>
       </CardContent>
       <CardFooter className="flex flex-col gap-2">
-        <Button asChild className="w-full">
-          <Link href="/dashboard/customer">
-            Go to Customer Dashboard <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
+        <Link href="/dashboard/customer" className={cn(buttonVariants(), "w-full")}>
+          Go to Customer Dashboard <ArrowRight className="ml-2 h-4 w-4" />
+        </Link>
       </CardFooter>
     </Card>
   );

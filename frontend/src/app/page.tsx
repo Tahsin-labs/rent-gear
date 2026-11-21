@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Navbar } from "@/components/shared/Navbar";
 import { Footer } from "@/components/shared/Footer";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Compass, ShieldCheck, Zap, Repeat } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function HomePage() {
   return (
@@ -23,12 +24,12 @@ export default function HomePage() {
               Find cameras, drones, camping equipment, audio gear, and more. Rent directly from trusted providers or list your own idle equipment.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-              <Button size="lg" asChild>
-                <Link href="/register">Get Started Free</Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/login">Sign In to Dashboard</Link>
-              </Button>
+              <Link href="/register" className={cn(buttonVariants({ size: "lg" }))}>
+                Get Started Free
+              </Link>
+              <Link href="/login" className={cn(buttonVariants({ size: "lg", variant: "outline" }))}>
+                Sign In to Dashboard
+              </Link>
             </div>
           </div>
         </section>

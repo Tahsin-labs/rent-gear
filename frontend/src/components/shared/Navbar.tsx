@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@/providers/auth-provider";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Package, Compass, LayoutDashboard, LogOut } from "lucide-react";
+import { Menu, Compass, LayoutDashboard, LogOut } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const { user, logout } = useAuth();
@@ -58,16 +59,14 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           {user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                  <Avatar className="h-9 w-9">
-                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                      {user.name?.charAt(0).toUpperCase() || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
+              <DropdownMenuTrigger className="relative h-9 w-9 rounded-full outline-none focus:ring-2 focus:ring-ring">
+                <Avatar className="h-9 w-9">
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                    {user.name?.charAt(0).toUpperCase() || "U"}
+                  </AvatarFallback>
+                </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">{user.name}</p>
@@ -78,10 +77,8 @@ export function Navbar() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href={getDashboardLink()} className="cursor-pointer">
-                    <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
-                  </Link>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => window.location.href = getDashboardLink()}>
+                  <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout} className="text-destructive cursor-pointer">
@@ -91,12 +88,12 @@ export function Navbar() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" asChild>
-                <Link href="/login">Sign In</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/register">Get Started</Link>
-              </Button>
+              <Link href="/login" className={cn(buttonVariants({ variant: "ghost" }))}>
+                Sign In
+              </Link>
+              <Link href="/register" className={cn(buttonVariants())}>
+                Get Started
+              </Link>
             </div>
           )}
         </div>
@@ -104,10 +101,8 @@ export function Navbar() {
         {/* Mobile menu sheet */}
         <div className="flex md:hidden items-center gap-2">
           <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
-              </Button>
+            <SheetTrigger className="p-2 rounded-md hover:bg-muted">
+              <Menu className="h-5 w-5" />
             </SheetTrigger>
             <SheetContent side="right">
               <SheetHeader>
@@ -130,12 +125,12 @@ export function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Button asChild className="w-full mt-4">
-                      <Link href="/login">Sign In</Link>
-                    </Button>
-                    <Button asChild variant="outline" className="w-full">
-                      <Link href="/register">Register</Link>
-                    </Button>
+                    <Link href="/login" className={cn(buttonVariants(), "w-full mt-4")}>
+                      Sign In
+                    </Link>
+                    <Link href="/register" className={cn(buttonVariants({ variant: "outline" }), "w-full")}>
+                      Register
+                    </Link>
                   </>
                 )}
               </div>

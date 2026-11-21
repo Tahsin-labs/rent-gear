@@ -3,10 +3,11 @@
 import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { XCircle, ArrowRight, RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { XCircle, RotateCcw } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 
 function CancelContent() {
   const searchParams = useSearchParams();
@@ -39,11 +40,9 @@ function CancelContent() {
         <p>You can return to your dashboard and retry whenever you are ready.</p>
       </CardContent>
       <CardFooter className="flex flex-col gap-2">
-        <Button asChild className="w-full">
-          <Link href="/dashboard/customer">
-            <RotateCcw className="mr-2 h-4 w-4" /> Return to My Rentals
-          </Link>
-        </Button>
+        <Link href="/dashboard/customer" className={cn(buttonVariants(), "w-full")}>
+          <RotateCcw className="mr-2 h-4 w-4" /> Return to My Rentals
+        </Link>
       </CardFooter>
     </Card>
   );

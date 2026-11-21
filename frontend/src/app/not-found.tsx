@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Compass } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function NotFound() {
   return (
@@ -10,9 +11,9 @@ export default function NotFound() {
       <p className="text-muted-foreground text-sm max-w-md mb-6">
         The gear or destination you are looking for does not exist or has been moved.
       </p>
-      <Button asChild>
-        <Link href="/">Back to Homepage</Link>
-      </Button>
+      <Link href="/" className={cn(buttonVariants())}>
+        Back to Homepage
+      </Link>
     </div>
   );
 }

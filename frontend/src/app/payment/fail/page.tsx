@@ -4,9 +4,10 @@ import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { AlertCircle, RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 
 function FailContent() {
   const searchParams = useSearchParams();
@@ -39,11 +40,9 @@ function FailContent() {
         <p>Please check your payment method balance or details and try again.</p>
       </CardContent>
       <CardFooter className="flex flex-col gap-2">
-        <Button asChild className="w-full">
-          <Link href="/dashboard/customer">
-            <RotateCcw className="mr-2 h-4 w-4" /> Back to Rentals
-          </Link>
-        </Button>
+        <Link href="/dashboard/customer" className={cn(buttonVariants(), "w-full")}>
+          <RotateCcw className="mr-2 h-4 w-4" /> Back to Rentals
+        </Link>
       </CardFooter>
     </Card>
   );
