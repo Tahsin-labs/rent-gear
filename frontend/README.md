@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GearUp Frontend
 
-## Getting Started
+Next.js App Router frontend for GearUp peer-to-peer gear sharing and rental platform.
 
-First, run the development server:
+## Tech Stack
+- **Framework**: Next.js 16 (App Router), React 19, TypeScript
+- **Styling & UI**: Tailwind CSS v4, shadcn/ui, Lucide Icons, Sonner
+- **State & Data Fetching**: TanStack Query (React Query v5)
+- **Forms & Validation**: React Hook Form, Zod
+- **Auth & Security**: JWT cookie-based session, `jose`, Next.js Middleware route protection
+- **Media**: Cloudinary (unsigned client-side uploads with size & type validation)
+- **Payment**: SSLCommerz redirect & callback integration
+
+---
+
+## Environment Variables
+
+Copy `.env.example` to `.env.local` and configure your credentials:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Variable | Description | Example |
+| :--- | :--- | :--- |
+| `NEXT_PUBLIC_API_URL` | Backend Express API base URL | `http://localhost:5000/api` |
+| `NEXT_PUBLIC_APP_URL` | Frontend application origin | `http://localhost:3000` |
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Cloudinary Cloud Name | `your_cloud_name` |
+| `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` | Cloudinary unsigned preset | `gearup_preset` |
+| `JWT_SECRET` | Secret key matching backend `JWT_ACCESS_SECRET` | `your_jwt_secret` |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+```bash
+# Install dependencies
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# Start development server
+npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Build for production
+npm run build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Start production server
+npm run start
 
-## Deploy on Vercel
+# Typecheck codebase
+npm run lint
+npx tsc --noEmit
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Directory Structure
+- `src/app/(auth)/`: Authentication pages (`/login`, `/register`)
+- `src/app/(public)/`: Public discovery pages
+- `src/app/dashboard/`: Role-gated dashboards (`customer`, `provider`, `admin`)
+- `src/app/payment/`: SSLCommerz payment callback pages (`success`, `fail`, `cancel`)
+- `src/components/ui/`: shadcn/ui components
+- `src/components/shared/`: Shared components (`Navbar`, `Footer`, `ImageUploader`, `StatusBadge`, `EmptyState`, etc.)
+- `src/hooks/`: TanStack Query hooks & mutations
+- `src/lib/api/`: Fetch API client and typed endpoints
+- `src/lib/validations/`: Zod schemas
+- `src/middleware.ts`: Role-based route guard and redirection
