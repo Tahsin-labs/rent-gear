@@ -22,6 +22,8 @@ import swaggerUi from "swagger-ui-express";
 
 const app: Application = express();
 
+app.set("trust proxy", 1);
+
 const allowedOrigins = [
   "http://localhost:3000",
   config.app_url,
@@ -44,6 +46,10 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.get("/health", (_req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 app.get("/", (req, res) => {
   res.status(200).json({
