@@ -42,10 +42,10 @@ const createPayment = async (
   }
 
   const customer = rental.customer;
-  const phone = customer.profile?.phone;
+  const phone = customer.profile?.phone || "01700000000";
 
-  if (!customer.name || !customer.email || !phone) {
-    throw new Error("Customer name, email and phone are required");
+  if (!customer.name || !customer.email) {
+    throw new Error("Customer name and email are required");
   }
 
   if (rental.payment?.status === PaymentStatus.COMPLETED) {
