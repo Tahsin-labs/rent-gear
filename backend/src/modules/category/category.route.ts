@@ -5,6 +5,8 @@ import  authorize  from "../../middlewares/role";
 
 const router = Router();
 
+router.get("/categories", categoryController.getAllCategories);
+
 router.post(
   "/categories",
   auth,
