@@ -37,8 +37,8 @@ const createPayment = async (
   });
 
   if (!rental) throw new Error("Rental not found");
-  if (rental.status !== "CONFIRMED") {
-    throw new Error("Only confirmed rentals can be paid");
+  if (rental.status !== "CONFIRMED" && rental.status !== "PENDING") {
+    throw new Error("Only pending or confirmed rentals can be paid");
   }
 
   const customer = rental.customer;
